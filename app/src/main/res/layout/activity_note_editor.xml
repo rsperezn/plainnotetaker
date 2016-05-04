@@ -11,9 +11,19 @@
         android:singleLine="false"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:hint="@string/hint_note">
+        android:hint="@string/hint_note"
+        android:layout_above="@+id/textView_editedTime">
 
         <requestFocus />
     </EditText>
+
+    <TextView
+        android:id="@+id/textView_editedTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/hint_autosaved"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

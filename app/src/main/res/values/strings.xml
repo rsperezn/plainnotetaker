@@ -5,5 +5,7 @@
     <string name="action_create">Create</string>
     <string name="hint_gettingStarted">Create your first note by pressing the + button. Your note is saved automatically.</string>
     <string name="hint_note">Note</string>
+    <string name="autosaved">Autosaved %1$d:%2$d.%3$s</string>
+    <string name="hint_autosaved">Autosaved</string>
 
 </resources>
