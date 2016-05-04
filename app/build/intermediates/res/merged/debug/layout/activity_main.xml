@@ -4,12 +4,28 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
+    <TextView
+        android:id="@+id/textView_gettingStarted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="@string/hint_gettingStarted"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#b0bec5"
+        android:textStyle="bold" />
+
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView_gettingStarted"
+        android:divider="@color/line_separator"
+        android:dividerHeight="1dp">
     </ListView>
 
 </RelativeLayout>
