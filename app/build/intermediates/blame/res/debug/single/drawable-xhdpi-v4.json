@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_launcher.png",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/drawable-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_action_create_note.png",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/drawable-xhdpi/ic_action_create_note.png"
+    },
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_listitem_edit.png",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/drawable-xhdpi/ic_listitem_edit.png"
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/layout/list_item_layout.xml",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/layout/list_item_layout.xml"
+    },
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/build/intermediates/res/merged/debug/layout/activity_note_editor.xml",
+        "source": "/home/santiago/StudioProjects/Plain NoteTaker_NEW/app/src/main/res/layout/activity_note_editor.xml"
+    }
+]
