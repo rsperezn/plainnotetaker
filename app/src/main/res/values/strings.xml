@@ -4,5 +4,6 @@
     <string name="app_name">Plain NoteTaker</string>
     <string name="action_create">Create</string>
     <string name="hint_gettingStarted">Create your first note by pressing the + button. Your note is saved automatically.</string>
+    <string name="hint_note">Note</string>
 
 </resources>
