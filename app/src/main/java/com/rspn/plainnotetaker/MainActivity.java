@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.rspn.plainnotetaker.data.NoteItem;
 import com.rspn.plainnotetaker.data.NotesDataSource;
@@ -24,12 +25,15 @@ public class MainActivity extends ListActivity {
 	private int currentNoteId;
 	private NotesDataSource dataSource;
 	private List<NoteItem> notesList;
+	private TextView gettingStarted_tv;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		registerForContextMenu(getListView());
+		gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
+		dataSource = new NotesDataSource(this);
 		
 		dataSource = new NotesDataSource(this);
 		
@@ -42,6 +46,9 @@ public class MainActivity extends ListActivity {
 		ArrayAdapter<NoteItem> adapter =
 				new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
 		setListAdapter(adapter);
+		if (!notesList.isEmpty()) {
+			gettingStarted_tv.setVisibility(View.GONE);
+		}
 		
 	}
 
