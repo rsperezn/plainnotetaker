@@ -1,32 +1,29 @@
 package com.rspn.plainnotetaker;
 
-import java.util.List;
-
-import com.rspn.plainnotetaker.R;
-import com.rspn.plainnotetaker.data.NoteItem;
-import com.rspn.plainnotetaker.data.NotesDataSource;
-
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.NotesDataSource;
+
+import java.util.List;
 
 public class MainActivity extends ListActivity {
 
 	private static final int EDITOR_ACTIVITY_REQUEST = 1001;
 	private static final int MENU_DELETE_ID = 1002;
 	private int currentNoteId;
-	private NotesDataSource datasource;
-	List<NoteItem> notesList;
+	private NotesDataSource dataSource;
+	private List<NoteItem> notesList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +31,14 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 		registerForContextMenu(getListView());
 		
-		datasource = new NotesDataSource(this);
+		dataSource = new NotesDataSource(this);
 		
 		refreshDisplay();
 		
 	}
 
 	private void refreshDisplay() {
-		notesList = datasource.findAll();
+		notesList = dataSource.findAll();
 		ArrayAdapter<NoteItem> adapter =
 				new ArrayAdapter<NoteItem>(this, R.layout.list_item_layout, notesList);
 		setListAdapter(adapter);
@@ -90,7 +87,7 @@ public class MainActivity extends ListActivity {
 			NoteItem note = new NoteItem();
 			note.setKey(data.getStringExtra("key"));
 			note.setText(data.getStringExtra("text"));
-			datasource.update(note);
+			dataSource.update(note);
 			refreshDisplay();
 		}
 	}
@@ -109,7 +106,7 @@ public class MainActivity extends ListActivity {
 		
 		if (item.getItemId() == MENU_DELETE_ID) {
 			NoteItem note = notesList.get(currentNoteId);
-			datasource.remove(note);
+			dataSource.remove(note);
 			refreshDisplay();
 		}
 		
