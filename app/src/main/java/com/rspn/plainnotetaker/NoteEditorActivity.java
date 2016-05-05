@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -62,13 +63,20 @@ public class NoteEditorActivity extends Activity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Calendar calendar = Calendar.getInstance();
-                edited_tv.setText(getString(
-                        R.string.autosaved,
-                        calendar.get(Calendar.HOUR),
-                        calendar.get(Calendar.MINUTE),
-                        calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM"));
+
+                edited_tv.setText(getString(calendar));
             }
         });
+    }
+
+    private String getString(Calendar calendar) {
+        int minute = calendar.get(Calendar.MINUTE);
+        String formattedMinutes = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute) ;
+        return getString(
+                R.string.autosaved,
+                calendar.get(Calendar.HOUR),
+                formattedMinutes,
+                calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM");
     }
 
     private void saveAndFinish() {
