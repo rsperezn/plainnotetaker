@@ -1,10 +1,9 @@
 package com.rspn.plainnotetaker;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -16,7 +15,7 @@ import com.rspn.plainnotetaker.data.NotesDataSource;
 
 import java.util.Calendar;
 
-public class NoteEditorActivity extends Activity {
+public class NoteEditorActivity extends AppCompatActivity {
 
     private NoteItem note;
     private NotesDataSource dataSource;
@@ -26,17 +25,9 @@ public class NoteEditorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
-        try {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-            ActionBar supportActionBar = getActionBar();
-            if (supportActionBar != null) {
-                getActionBar().setDisplayShowHomeEnabled(true);
-                getActionBar().setLogo(R.drawable.ic_launcher);
-                getActionBar().setDisplayUseLogoEnabled(true);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         dataSource = new NotesDataSource(this);
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
@@ -71,7 +62,7 @@ public class NoteEditorActivity extends Activity {
 
     private String getString(Calendar calendar) {
         int minute = calendar.get(Calendar.MINUTE);
-        String formattedMinutes = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute) ;
+        String formattedMinutes = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
         return getString(
                 R.string.autosaved,
                 calendar.get(Calendar.HOUR),
