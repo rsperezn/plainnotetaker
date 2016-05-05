@@ -13,8 +13,11 @@
     </style>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="colorControlNormal">#C5C5C5</item>
+        <item name="colorControlActivated">#F8BBD0</item>
+        <item name="colorControlHighlight">#B6B6B6</item>
     </style>
 
 </resources>

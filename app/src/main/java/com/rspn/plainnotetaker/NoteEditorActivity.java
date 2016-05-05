@@ -1,5 +1,6 @@
 package com.rspn.plainnotetaker;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,18 @@ public class NoteEditorActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            ActionBar supportActionBar = getActionBar();
+            if (supportActionBar != null) {
+                getActionBar().setDisplayShowHomeEnabled(true);
+                getActionBar().setLogo(R.drawable.ic_launcher);
+                getActionBar().setDisplayUseLogoEnabled(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        }
         dataSource = new NotesDataSource(this);
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();

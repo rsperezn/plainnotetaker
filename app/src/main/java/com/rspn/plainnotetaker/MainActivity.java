@@ -3,6 +3,7 @@ package com.rspn.plainnotetaker;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -18,7 +19,7 @@ import com.rspn.plainnotetaker.data.NotesDataSource;
 
 import java.util.List;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements View.OnClickListener {
 
 	private static final int EDITOR_ACTIVITY_REQUEST = 1001;
 	private static final int MENU_DELETE_ID = 1002;
@@ -34,9 +35,11 @@ public class MainActivity extends ListActivity {
 		registerForContextMenu(getListView());
 		gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
 		dataSource = new NotesDataSource(this);
-		
+		FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
+		plus_fb.setOnClickListener(this);
+
 		dataSource = new NotesDataSource(this);
-		
+
 		refreshDisplay();
 		
 	}
@@ -59,16 +62,6 @@ public class MainActivity extends ListActivity {
 		return true;
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		if (item.getItemId() == R.id.action_create) {
-			createNote();
-		}
-		
-		return super.onOptionsItemSelected(item);
-	}
-
 	private void createNote() {
 		NoteItem note = NoteItem.getNew();
 		Intent intent = new Intent(this, NoteEditorActivity.class);
@@ -119,5 +112,9 @@ public class MainActivity extends ListActivity {
 		
 		return super.onContextItemSelected(item);
 	}
-	
+
+	@Override
+	public void onClick(View v) {
+		createNote();
+	}
 }
