@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int EDITOR_ACTIVITY_REQUEST = 1001;
     private static final int MENU_DELETE_ID = 1002;
+    private static final int MENU_SHARE_NOTE = 1003;
     private int currentNoteId;
     private NotesDataSource dataSource;
     private List<NoteItem> notesList;
@@ -89,15 +90,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
         currentNoteId = (int) info.id;
         menu.add(0, MENU_DELETE_ID, 0, "Delete");
+        menu.add(1, MENU_SHARE_NOTE, 1, "Share Note");
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        NoteItem note = notesList.get(currentNoteId);
 
         if (item.getItemId() == MENU_DELETE_ID) {
-            NoteItem note = notesList.get(currentNoteId);
             dataSource.remove(note);
             refreshDisplay();
+        } else {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, note.getText());
+            startActivity(intent);
         }
 
         return super.onContextItemSelected(item);
