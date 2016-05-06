@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <EditText
-        android:id="@+id/noteText"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:ems="10" 
-        android:singleLine="false"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:hint="@string/hint_note"
-        android:layout_above="@+id/textView_editedTime">
-
-        <requestFocus />
-    </EditText>
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView_editedTime"
@@ -23,7 +10,20 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/hint_autosaved"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="right" />
 
-</RelativeLayout>
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:ems="10" 
+        android:singleLine="false"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:hint="@string/hint_note"
+        >
+
+        <requestFocus />
+    </EditText>
+
+</LinearLayout>
