@@ -1,10 +1,15 @@
 package com.rspn.plainnotetaker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -15,10 +20,14 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rspn.plainnotetaker.data.NoteItem;
 import com.rspn.plainnotetaker.data.NotesDataSource;
+import com.woxthebox.draglistview.DragItem;
+import com.woxthebox.draglistview.DragListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -31,21 +40,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<NoteItem> notesList;
     private TextView gettingStarted_tv;
     private ListView listView;
+    private DragListView dragListView;
+    private ArrayList<Pair<Long, String>> mItemArray;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        listView = (ListView) findViewById(R.id.listView_allNotes);
-        listView.setOnItemClickListener(this);
-        registerForContextMenu(listView);
-        gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
+        dragListView = (DragListView) findViewById(R.id.drag_list_view);
+        dragListView.setDragListListener(new DragListView.DragListListener() {
+            @Override
+            public void onItemDragStarted(int position) {
+                Toast.makeText(dragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemDragging(int itemPosition, float x, float y) {
+
+            }
+
+            @Override
+            public void onItemDragEnded(int fromPosition, int toPosition) {
+                if (fromPosition != toPosition) {
+                    Toast.makeText(dragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        dragListView.setLayoutManager(new LinearLayoutManager(this));
+        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false);
+        dragListView.setAdapter(listAdapter,true);
+        dragListView.setCanDragHorizontally(false);
+//        listView = (ListView) findViewById(R.id.listView_allNotes);
+//        listView.setOnItemClickListener(this);
+//        registerForContextMenu(listView);
+//        gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
         dataSource = new NotesDataSource(this);
         FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
         plus_fb.setOnClickListener(this);
 
         dataSource = new NotesDataSource(this);
+        setActionBarLogo();
         refreshDisplay();
+        setupListRecyclerView();
+    }
+
+    private void setActionBarLogo() {
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -54,14 +95,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setupListRecyclerView() {
+        dragListView.setLayoutManager(new LinearLayoutManager(this));
+        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false);
+        dragListView.setAdapter(listAdapter, true);
+        dragListView.setCanDragHorizontally(false);
+        dragListView.setCustomDragItem(new MyDragItem(this, R.layout.list_item));
+    }
+
     private void refreshDisplay() {
-        notesList = dataSource.findAll();
-        ArrayAdapter<NoteItem> adapter =
-                new ArrayAdapter<>(this, R.layout.list_item_layout, notesList);
-        listView.setAdapter(adapter);
-        if (!notesList.isEmpty()) {
-            gettingStarted_tv.setVisibility(View.GONE);
+//        notesList = dataSource.findAll();
+//        ArrayAdapter<NoteItem> adapter =
+//                new ArrayAdapter<>(this, R.layout.list_item_layout, notesList);
+//        listView.setAdapter(adapter);
+//        if (!notesList.isEmpty()) {
+//            gettingStarted_tv.setVisibility(View.GONE);
+//        }
+        mItemArray = new ArrayList<>();
+        for (int i = 0; i < 40; i++) {
+            mItemArray.add(new Pair<>((long) i, "Item " + i));
         }
+
     }
 
     private void createNote() {
@@ -123,5 +177,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("key", note.getKey());
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
+    }
+    public static abstract class DragListListenerAdapter implements DragListView.DragListListener {
+        @Override
+        public void onItemDragStarted(int position) {
+        }
+
+        @Override
+        public void onItemDragging(int itemPosition, float x, float y) {
+        }
+
+        @Override
+        public void onItemDragEnded(int fromPosition, int toPosition) {
+        }
+    }
+
+    private static class MyDragItem extends DragItem {
+
+        public MyDragItem(Context context, int layoutId) {
+            super(context, layoutId);
+        }
+
+        @Override
+        public void onBindDragView(View clickedView, View dragView) {
+            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
+            ((TextView) dragView.findViewById(R.id.text)).setText(text);
+            dragView.setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
+        }
     }
 }

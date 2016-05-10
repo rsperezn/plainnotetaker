@@ -2,5 +2,6 @@
 <resources>
 
     <color name="line_separator">#0097c9</color>
+    <color name="list_item_background">#AACCCCCC</color>
 
 </resources>
