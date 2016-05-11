@@ -35,6 +35,10 @@ public class NotesDataSource {
 		return noteList;
 		
 	}
+
+	public boolean isEmpty() {
+		return notePrefs.getAll().isEmpty();
+	}
 	
 	public boolean update(NoteItem note) {
 		

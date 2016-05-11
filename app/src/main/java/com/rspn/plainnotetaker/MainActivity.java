@@ -4,20 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView gettingStarted_tv;
     private ListView listView;
     private DragListView dragListView;
-    private ArrayList<Pair<Long, String>> mItemArray;
+    private ArrayList<Pair<Long, NoteItem>> mItemArray;
+    private ItemAdapter listAdapter;
 
 
     @Override
@@ -75,14 +72,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        listView = (ListView) findViewById(R.id.listView_allNotes);
 //        listView.setOnItemClickListener(this);
 //        registerForContextMenu(listView);
-//        gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
+        gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
         dataSource = new NotesDataSource(this);
         FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
         plus_fb.setOnClickListener(this);
 
         dataSource = new NotesDataSource(this);
         setActionBarLogo();
-        refreshDisplay();
+        loadNotesList();
         setupListRecyclerView();
     }
 
@@ -103,19 +100,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dragListView.setCustomDragItem(new MyDragItem(this, R.layout.list_item));
     }
 
-    private void refreshDisplay() {
-//        notesList = dataSource.findAll();
-//        ArrayAdapter<NoteItem> adapter =
-//                new ArrayAdapter<>(this, R.layout.list_item_layout, notesList);
-//        listView.setAdapter(adapter);
-//        if (!notesList.isEmpty()) {
-//            gettingStarted_tv.setVisibility(View.GONE);
-//        }
-        mItemArray = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            mItemArray.add(new Pair<>((long) i, "Item " + i));
+    private void loadNotesList() {
+        if (!dataSource.isEmpty()) {
+            gettingStarted_tv.setVisibility(View.GONE);
         }
+        refreshDisplay();
+    }
 
+    private void refreshDisplay() {
+        notesList = dataSource.findAll();
+        mItemArray = new ArrayList<>();
+
+        for (int i = 0; i < notesList.size(); i++) {
+            mItemArray.add(new Pair<>((long) i, notesList.get(i)));
+        }
+        listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false);
+        dragListView.setAdapter(listAdapter, true);
     }
 
     private void createNote() {
@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
     }
+
     public static abstract class DragListListenerAdapter implements DragListView.DragListListener {
         @Override
         public void onItemDragStarted(int position) {

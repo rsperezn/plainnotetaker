@@ -23,16 +23,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rspn.plainnotetaker.data.NoteItem;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 
-public class ItemAdapter extends DragItemAdapter<Pair<Long, String>, ItemAdapter.ViewHolder> {
+public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapter.ViewHolder> {
 
     private int mLayoutId;
     private int mGrabHandleId;
 
-    public ItemAdapter(ArrayList<Pair<Long, String>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public ItemAdapter(ArrayList<Pair<Long, NoteItem>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -49,7 +50,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, String>, ItemAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String text = mItemList.get(position).second;
+        String text = mItemList.get(position).second.getText();
         holder.mText.setText(text);
         holder.itemView.setTag(text);
     }
@@ -59,7 +60,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, String>, ItemAdapter
         return mItemList.get(position).first;
     }
 
-    public class ViewHolder extends DragItemAdapter<Pair<Long, String>, ViewHolder>.ViewHolder {
+    public class ViewHolder extends DragItemAdapter<Pair<Long, NoteItem>, ViewHolder>.ViewHolder {
         public TextView mText;
 
         public ViewHolder(final View itemView) {
