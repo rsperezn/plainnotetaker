@@ -22,18 +22,17 @@ public class NotesDataSource {
 		
 		Map<String, ?> notesMap = notePrefs.getAll();
 		
-		SortedSet<String> keys = new TreeSet<String>(notesMap.keySet());
+		SortedSet<String> keys = new TreeSet<>(notesMap.keySet());
 		
-		List<NoteItem> noteList = new ArrayList<NoteItem>();
+		List<NoteItem> noteList = new ArrayList<>();
 		for (String key : keys) {
 			NoteItem note = new NoteItem();
-			note.setKey(key);
+			note.setKey(Long.valueOf(key));
 			note.setText((String) notesMap.get(key));
 			noteList.add(note);
 		}
 		
 		return noteList;
-		
 	}
 
 	public boolean isEmpty() {
@@ -43,21 +42,19 @@ public class NotesDataSource {
 	public boolean update(NoteItem note) {
 		
 		SharedPreferences.Editor editor = notePrefs.edit();
-		editor.putString(note.getKey(), note.getText());
+		editor.putString(Long.toString(note.getKey()), note.getText());
 		editor.commit();
 		return true;
 	}
 	
 	public boolean remove(NoteItem note) {
-		
-		if (notePrefs.contains(note.getKey())) {
+		String key = Long.toString(note.getKey());
+		if (notePrefs.contains(key)) {
 			SharedPreferences.Editor editor = notePrefs.edit();
-			editor.remove(note.getKey());
+			editor.remove(key);
 			editor.commit();
 		}
-		
 		return true;
 	}
-	
-	
+
 }

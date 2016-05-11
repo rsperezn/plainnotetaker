@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         dataSource = new NotesDataSource(this);
         setActionBarLogo();
-        loadNotesList();
+        refreshDisplay();
         setupListRecyclerView();
     }
 
@@ -100,26 +100,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dragListView.setCustomDragItem(new MyDragItem(this, R.layout.list_item));
     }
 
-    private void loadNotesList() {
+    private void refreshDisplay() {
         if (!dataSource.isEmpty()) {
             gettingStarted_tv.setVisibility(View.GONE);
         }
-        refreshDisplay();
-    }
-
-    private void refreshDisplay() {
         notesList = dataSource.findAll();
         mItemArray = new ArrayList<>();
 
-        for (int i = 0; i < notesList.size(); i++) {
-            mItemArray.add(new Pair<>((long) i, notesList.get(i)));
+        for (NoteItem noteItem : notesList) {
+            mItemArray.add(new Pair<>(noteItem.getKey(),noteItem));
         }
         listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false);
         dragListView.setAdapter(listAdapter, true);
     }
 
     private void createNote() {
-        NoteItem note = NoteItem.getNew();
+        NoteItem note = NoteItem.newInstance();
         Intent intent = new Intent(this, NoteEditorActivity.class);
         intent.putExtra("key", note.getKey());
         intent.putExtra("text", note.getText());
@@ -130,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
             NoteItem note = new NoteItem();
-            note.setKey(data.getStringExtra("key"));
+            note.setKey(data.getLongExtra("key",0L));
             note.setText(data.getStringExtra("text"));
             dataSource.update(note);
             refreshDisplay();

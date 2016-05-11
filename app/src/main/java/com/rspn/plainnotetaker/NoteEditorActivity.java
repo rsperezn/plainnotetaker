@@ -33,7 +33,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
         note = new NoteItem();
-        note.setKey(intent.getStringExtra("key"));
+        note.setKey(intent.getLongExtra("key",0L));
         note.setText(intent.getStringExtra("text"));
 
         EditText editText = (EditText) findViewById(R.id.noteText);
