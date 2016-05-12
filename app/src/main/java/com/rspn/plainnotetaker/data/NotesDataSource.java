@@ -57,4 +57,7 @@ public class NotesDataSource {
 		return true;
 	}
 
+	public NoteItem findById(long id) {
+		return (NoteItem) notePrefs.getAll().get(String.valueOf(id));
+	}
 }
