@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
 
 public class NotesDataSource {
 
@@ -58,6 +59,12 @@ public class NotesDataSource {
 	}
 
 	public NoteItem findById(long id) {
-		return (NoteItem) notePrefs.getAll().get(String.valueOf(id));
+		NoteItem noteItem = new NoteItem();
+		noteItem.setKey(id);
+		noteItem.setText((String) notePrefs
+				.getAll()
+				.get(String.valueOf(id))
+		);
+		return noteItem;
 	}
 }

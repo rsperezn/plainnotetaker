@@ -16,6 +16,8 @@
 
 package com.rspn.plainnotetaker;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,19 +26,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.NotesDataSource;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 
 public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapter.ViewHolder> {
 
+    private static final boolean dragOnLongPress = false;
     private int mLayoutId;
     private int mGrabHandleId;
+    private Activity activity;
 
-    public ItemAdapter(ArrayList<Pair<Long, NoteItem>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    public ItemAdapter(ArrayList<Pair<Long, NoteItem>> list, int layoutId, int grabHandleId, Activity activity) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
+        this.activity = activity;
         setHasStableIds(true);
         setItemList(list);
     }
@@ -62,15 +68,21 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
 
     public class ViewHolder extends DragItemAdapter<Pair<Long, NoteItem>, ViewHolder>.ViewHolder {
         public TextView mText;
+        private NotesDataSource notesDataSource;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId);
             mText = (TextView) itemView.findViewById(R.id.text);
+            notesDataSource = new NotesDataSource(mText.getContext());
         }
 
         @Override
         public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            NoteItem noteItem = notesDataSource.findById(getItemId());
+            Intent intent = new Intent(view.getContext(), NoteEditorActivity.class);
+            intent.putExtra("key", noteItem.getKey());
+            intent.putExtra("text", noteItem.getText());
+            activity.startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
         }
 
         @Override
