@@ -87,6 +87,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
 
         @Override
         public boolean onItemLongClicked(View view) {
+
             Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
             return true;
         }
