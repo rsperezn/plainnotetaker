@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.ContactsContract;
 
 public class NotesDataSource {
 
@@ -47,9 +46,9 @@ public class NotesDataSource {
 		editor.commit();
 		return true;
 	}
-	
-	public boolean remove(NoteItem note) {
-		String key = Long.toString(note.getKey());
+
+	public boolean remove(long noteId) {
+		String key = String.valueOf(noteId);
 		if (notePrefs.contains(key)) {
 			SharedPreferences.Editor editor = notePrefs.edit();
 			editor.remove(key);
@@ -66,5 +65,10 @@ public class NotesDataSource {
 				.get(String.valueOf(id))
 		);
 		return noteItem;
+	}
+
+	public String getNoteText(long noteId) {
+		String string = notePrefs.getString(String.valueOf(noteId), null);
+		return string == null ? "Note cannot be retrieved" : string;
 	}
 }

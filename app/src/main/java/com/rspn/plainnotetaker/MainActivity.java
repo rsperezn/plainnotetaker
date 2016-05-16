@@ -8,12 +8,7 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +23,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int EDITOR_ACTIVITY_REQUEST = 1001;
-    private static final int MENU_DELETE_ID = 1002;
-    private static final int MENU_SHARE_NOTE = 1003;
-    private int currentNoteId;
     private NotesDataSource dataSource;
     private List<NoteItem> notesList;
     private TextView gettingStarted_tv;
-    private ListView listView;
     private DragListView dragListView;
     private ArrayList<Pair<Long, NoteItem>> mItemArray;
 
@@ -66,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, this);
         dragListView.setAdapter(listAdapter, true);
         dragListView.setCanDragHorizontally(false);
-//        listView = (ListView) findViewById(R.id.listView_allNotes);
-//        listView.setOnItemClickListener(this);
-//        registerForContextMenu(listView);
         gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
         dataSource = new NotesDataSource(this);
         FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
@@ -97,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dragListView.setCustomDragItem(new MyDragItem(this, R.layout.list_item));
     }
 
-    private void refreshDisplay() {
+    public void refreshDisplay() {
         if (!dataSource.isEmpty()) {
             gettingStarted_tv.setVisibility(View.GONE);
         }
@@ -120,34 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dataSource.update(note);
             refreshDisplay();
         }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo) {
-
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
-        currentNoteId = (int) info.id;
-        menu.add(0, MENU_DELETE_ID, 0, "Delete");
-        menu.add(1, MENU_SHARE_NOTE, 1, "Share Note");
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        NoteItem note = notesList.get(currentNoteId);
-
-        if (item.getItemId() == MENU_DELETE_ID) {
-            dataSource.remove(note);
-            refreshDisplay();
-        } else {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, note.getText());
-            startActivity(intent);
-        }
-
-        return super.onContextItemSelected(item);
     }
 
     @Override
