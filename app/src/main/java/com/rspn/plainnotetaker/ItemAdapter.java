@@ -26,7 +26,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rspn.plainnotetaker.data.NoteItem;
-import com.rspn.plainnotetaker.data.NotesDataSource;
+import com.rspn.plainnotetaker.database.NoteItemDataSource;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
@@ -68,19 +68,20 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
 
     public class ViewHolder extends DragItemAdapter<Pair<Long, NoteItem>, ViewHolder>.ViewHolder {
         public TextView mText;
-        private NotesDataSource notesDataSource;
+        private NoteItemDataSource notesDataSource;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId);
             mText = (TextView) itemView.findViewById(R.id.text);
-            notesDataSource = new NotesDataSource(mText.getContext());
+            notesDataSource = new NoteItemDataSource(mText.getContext());
         }
 
         @Override
         public void onItemClicked(View view) {
-            NoteItem noteItem = notesDataSource.findById(getItemId());
+            notesDataSource.open();
+            NoteItem noteItem = notesDataSource.getNoteItemText(getItemId());
             Intent intent = new Intent(view.getContext(), NoteEditorActivity.class);
-            intent.putExtra("key", noteItem.getKey());
+            intent.putExtra("key", noteItem.getId());
             intent.putExtra("text", noteItem.getText());
             activity.startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
         }

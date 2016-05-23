@@ -9,7 +9,16 @@ public class NoteItem {
     private long key;
     private String text;
 
-    public long getKey() {
+    @SuppressLint("SimpleDateFormat")
+    public static NoteItem newInstance() {
+        NoteItem note = new NoteItem();
+        note.setKey(new Date().getTime());
+        note.setText("");
+        return note;
+
+    }
+
+    public long getId() {
         return key;
     }
 
@@ -23,15 +32,6 @@ public class NoteItem {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static NoteItem newInstance() {
-        NoteItem note = new NoteItem();
-        note.setKey(new Date().getTime());
-        note.setText("");
-        return note;
-
     }
 
     @Override

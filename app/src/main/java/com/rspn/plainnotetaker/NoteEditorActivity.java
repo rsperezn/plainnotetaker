@@ -11,14 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rspn.plainnotetaker.data.NoteItem;
-import com.rspn.plainnotetaker.data.NotesDataSource;
+import com.rspn.plainnotetaker.database.NoteItemDataSource;
 
 import java.util.Calendar;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
     private NoteItem note;
-    private NotesDataSource dataSource;
+    private NoteItemDataSource dataSource;
     private TextView edited_tv;
 
     @Override
@@ -29,11 +29,12 @@ public class NoteEditorActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        dataSource = new NotesDataSource(this);
+        dataSource = new NoteItemDataSource(this);
+        dataSource.open();
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
         note = new NoteItem();
-        note.setKey(intent.getLongExtra("key",0L));
+        note.setKey(intent.getLongExtra("key", 0L));
         note.setText(intent.getStringExtra("text"));
 
         EditText editText = (EditText) findViewById(R.id.noteText);
@@ -75,7 +76,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         String noteText = et.getText().toString();
 
         Intent intent = new Intent();
-        intent.putExtra("key", note.getKey());
+        intent.putExtra("key", note.getId());
         intent.putExtra("text", noteText);
         setResult(RESULT_OK, intent);
         finish();
@@ -95,4 +96,15 @@ public class NoteEditorActivity extends AppCompatActivity {
         saveAndFinish();
     }
 
+    @Override
+    protected void onResume() {
+        dataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        dataSource.close();
+        super.onPause();
+    }
 }

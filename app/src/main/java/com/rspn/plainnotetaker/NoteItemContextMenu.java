@@ -1,6 +1,7 @@
 package com.rspn.plainnotetaker;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.rspn.plainnotetaker.data.NotesDataSource;
+import com.rspn.plainnotetaker.database.NoteItemDataSource;
 
 
 public class NoteItemContextMenu extends DialogFragment implements View.OnClickListener {
 
-    private static NotesDataSource notesDataSource;
+    private static NoteItemDataSource notesDataSource;
     private LinearLayout delete_ll;
     private LinearLayout share_ll;
 
@@ -35,7 +36,7 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
         share_ll = (LinearLayout) view.findViewById(R.id.share_LinearLayout);
         delete_ll.setOnClickListener(this);
         share_ll.setOnClickListener(this);
-        notesDataSource = new NotesDataSource(getActivity());
+        notesDataSource = new NoteItemDataSource(getActivity());
         return view;
     }
 
@@ -47,6 +48,7 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        notesDataSource.open();
         int id = view.getId();
         long noteId = getArguments().getLong("noteId");
 
@@ -61,7 +63,7 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
                 break;
 
             case R.id.delete_LinearLayout:
-                notesDataSource.remove(noteId);
+                notesDataSource.deleteNoteItem(noteId);
                 ((MainActivity) getActivity()).refreshDisplay();
                 dismiss();
                 break;
@@ -71,6 +73,11 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
     }
 
     public String getNoteText(long noteId) {
-        return notesDataSource.getNoteText(noteId);
+        return notesDataSource.getNoteItemText(noteId).getText();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        notesDataSource.close();
     }
 }

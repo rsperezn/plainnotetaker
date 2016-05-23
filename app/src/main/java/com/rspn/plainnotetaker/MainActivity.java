@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rspn.plainnotetaker.data.NoteItem;
-import com.rspn.plainnotetaker.data.NotesDataSource;
+import com.rspn.plainnotetaker.database.NoteItemDataSource;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 
@@ -23,11 +23,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final int EDITOR_ACTIVITY_REQUEST = 1001;
-    private NotesDataSource dataSource;
-    private List<NoteItem> notesList;
     private TextView gettingStarted_tv;
     private DragListView dragListView;
     private ArrayList<Pair<Long, NoteItem>> mItemArray;
+    private NoteItemDataSource noteItemDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +57,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dragListView.setAdapter(listAdapter, true);
         dragListView.setCanDragHorizontally(false);
         gettingStarted_tv = (TextView) findViewById(R.id.textView_gettingStarted);
-        dataSource = new NotesDataSource(this);
         FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
         plus_fb.setOnClickListener(this);
 
-        dataSource = new NotesDataSource(this);
+        noteItemDataSource = new NoteItemDataSource(this);
         setActionBarLogo();
         refreshDisplay();
         setupListRecyclerView();
@@ -86,14 +84,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void refreshDisplay() {
-        if (!dataSource.isEmpty()) {
+        noteItemDataSource.open();
+        if (!noteItemDataSource.isEmpty()) {
             gettingStarted_tv.setVisibility(View.GONE);
         }
-        notesList = dataSource.findAll();
+        List<NoteItem> notesList = noteItemDataSource.getAllNoteItems();
         mItemArray = new ArrayList<>();
 
         for (NoteItem noteItem : notesList) {
-            mItemArray.add(new Pair<>(noteItem.getKey(), noteItem));
+            mItemArray.add(new Pair<>(noteItem.getId(), noteItem));
         }
         ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, this);
         dragListView.setAdapter(listAdapter, true);
@@ -105,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             NoteItem note = new NoteItem();
             note.setKey(data.getLongExtra("key", 0L));
             note.setText(data.getStringExtra("text"));
-            dataSource.update(note);
             refreshDisplay();
         }
     }
@@ -114,9 +112,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         NoteItem note = NoteItem.newInstance();
         Intent intent = new Intent(this, NoteEditorActivity.class);
-        intent.putExtra("key", note.getKey());
+        intent.putExtra("key", note.getId());
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
+    }
+
+    @Override
+    protected void onResume() {
+        noteItemDataSource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        noteItemDataSource.close();
+        super.onPause();
     }
 
     public static abstract class DragListListenerAdapter implements DragListView.DragListListener {
