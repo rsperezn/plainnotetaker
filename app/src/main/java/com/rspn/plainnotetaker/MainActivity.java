@@ -129,20 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
     }
 
-    public static abstract class DragListListenerAdapter implements DragListView.DragListListener {
-        @Override
-        public void onItemDragStarted(int position) {
-        }
-
-        @Override
-        public void onItemDragging(int itemPosition, float x, float y) {
-        }
-
-        @Override
-        public void onItemDragEnded(int fromPosition, int toPosition) {
-        }
-    }
-
     private static class MyDragItem extends DragItem {
 
         public MyDragItem(Context context, int layoutId) {

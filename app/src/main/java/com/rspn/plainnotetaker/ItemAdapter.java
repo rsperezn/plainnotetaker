@@ -34,9 +34,9 @@ import java.util.ArrayList;
 public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapter.ViewHolder> {
 
     private static final boolean dragOnLongPress = false;
-    private int mLayoutId;
-    private int mGrabHandleId;
-    private Activity activity;
+    private final int mLayoutId;
+    private final int mGrabHandleId;
+    private final Activity activity;
 
     public ItemAdapter(ArrayList<Pair<Long, NoteItem>> list, int layoutId, int grabHandleId, Activity activity) {
         super(dragOnLongPress);
@@ -67,8 +67,8 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
     }
 
     public class ViewHolder extends DragItemAdapter<Pair<Long, NoteItem>, ViewHolder>.ViewHolder {
-        public TextView mText;
-        private NoteItemDataSource notesDataSource;
+        public final TextView mText;
+        private final NoteItemDataSource notesDataSource;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId);

@@ -14,15 +14,15 @@ import java.util.List;
 
 public class NoteItemDataSource {
 
-    private SQLiteDatabase database;
-    private NoteItemDBOpenHelper dbHelper;
-    private String[] allColumns = {
+    private final NoteItemDBOpenHelper dbHelper;
+    private final String[] allColumns = {
             NoteItemDBOpenHelper.COLUMN_NOTE_ID,
             NoteItemDBOpenHelper.COLUMN_TITLE,
             NoteItemDBOpenHelper.COLUMN_TEXT,
             NoteItemDBOpenHelper.COLUMN_DISPLAY_ORDER,
             NoteItemDBOpenHelper.COLUMN_COLOR,
     };
+    private SQLiteDatabase database;
 
     public NoteItemDataSource(Context context) {
         dbHelper = new NoteItemDBOpenHelper(context);
@@ -36,7 +36,7 @@ public class NoteItemDataSource {
         dbHelper.close();
     }
 
-    public NoteItem createNote(NoteItem noteItem) {
+    private void createNote(NoteItem noteItem) {
         ContentValues values = new ContentValues();
         values.put(NoteItemDBOpenHelper.COLUMN_NOTE_ID, noteItem.getId());
         values.put(NoteItemDBOpenHelper.COLUMN_TITLE, "sample title");
@@ -57,9 +57,7 @@ public class NoteItemDataSource {
                 null,
                 null);
         cursor.moveToFirst();
-        NoteItem newComment = cursorToNoteItem(cursor);
         cursor.close();
-        return newComment;
     }
 
     public void deleteNoteItem(long noteId) {
@@ -99,7 +97,7 @@ public class NoteItemDataSource {
         return noteItem;
     }
 
-    public void update(NoteItem note) {
+    public void createOrUpdate(NoteItem note) {
         ContentValues cv = new ContentValues();
         cv.put(NoteItemDBOpenHelper.COLUMN_TEXT, note.getText()); //These Fields should be your String values of actual column names
         int rowsAffected = database.update(NoteItemDBOpenHelper.TABLE_NOTES, cv, "noteId=" + note.getId(), null);

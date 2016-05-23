@@ -15,8 +15,6 @@ import com.rspn.plainnotetaker.database.NoteItemDataSource;
 public class NoteItemContextMenu extends DialogFragment implements View.OnClickListener {
 
     private static NoteItemDataSource notesDataSource;
-    private LinearLayout delete_ll;
-    private LinearLayout share_ll;
 
     public NoteItemContextMenu() {
     }
@@ -32,8 +30,8 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.note_item_context_menu, null, false);
-        delete_ll = (LinearLayout) view.findViewById(R.id.delete_LinearLayout);
-        share_ll = (LinearLayout) view.findViewById(R.id.share_LinearLayout);
+        LinearLayout delete_ll = (LinearLayout) view.findViewById(R.id.delete_LinearLayout);
+        LinearLayout share_ll = (LinearLayout) view.findViewById(R.id.share_LinearLayout);
         delete_ll.setOnClickListener(this);
         share_ll.setOnClickListener(this);
         notesDataSource = new NoteItemDataSource(getActivity());
@@ -72,7 +70,7 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
         }
     }
 
-    public String getNoteText(long noteId) {
+    private String getNoteText(long noteId) {
         return notesDataSource.getNoteItemText(noteId).getText();
     }
 

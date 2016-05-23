@@ -49,7 +49,7 @@ public class NoteEditorActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 note.setText(charSequence.toString());
-                dataSource.update(note);
+                dataSource.createOrUpdate(note);
             }
 
             @Override
