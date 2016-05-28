@@ -79,9 +79,9 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
         @Override
         public void onItemClicked(View view) {
             notesDataSource.open();
-            NoteItem noteItem = notesDataSource.getNoteItemText(getItemId());
+            NoteItem noteItem = notesDataSource.getNoteTextById(getItemId());
             Intent intent = new Intent(view.getContext(), NoteEditorActivity.class);
-            intent.putExtra("key", noteItem.getId());
+            intent.putExtra("id", noteItem.getId());
             intent.putExtra("text", noteItem.getText());
             activity.startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
         }

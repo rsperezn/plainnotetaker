@@ -6,24 +6,23 @@ import java.util.Date;
 
 public class NoteItem {
 
-    private long key;
+    private long id;
     private String text;
+    private int displayPosition;
 
-    @SuppressLint("SimpleDateFormat")
     public static NoteItem newInstance() {
         NoteItem note = new NoteItem();
-        note.setKey(new Date().getTime());
+        note.setId(new Date().getTime());
         note.setText("");
         return note;
-
     }
 
     public long getId() {
-        return key;
+        return id;
     }
 
-    public void setKey(long key) {
-        this.key = key;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getText() {
@@ -34,9 +33,16 @@ public class NoteItem {
         this.text = text;
     }
 
+    public int getDisplayPosition() {
+        return displayPosition;
+    }
+
+    public void setDisplayPosition(int displayPosition) {
+        this.displayPosition = displayPosition;
+    }
+
     @Override
     public String toString() {
         return this.getText();
     }
-
 }

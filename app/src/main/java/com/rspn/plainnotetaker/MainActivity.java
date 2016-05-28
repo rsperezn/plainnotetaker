@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rspn.plainnotetaker.data.NoteItem;
 import com.rspn.plainnotetaker.database.NoteItemDataSource;
@@ -33,24 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dragListView = (DragListView) findViewById(R.id.drag_list_view);
-        dragListView.setDragListListener(new DragListView.DragListListener() {
-            @Override
-            public void onItemDragStarted(int position) {
-                Toast.makeText(dragListView.getContext(), "Start - position: " + position, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onItemDragging(int itemPosition, float x, float y) {
-
-            }
-
-            @Override
-            public void onItemDragEnded(int fromPosition, int toPosition) {
-                if (fromPosition != toPosition) {
-                    Toast.makeText(dragListView.getContext(), "End - position: " + toPosition, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        dragListView.setDragListListener(new NoteItemDragListListenerAdapter());
 
         dragListView.setLayoutManager(new LinearLayoutManager(this));
         ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, this);
@@ -102,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
             NoteItem note = new NoteItem();
-            note.setKey(data.getLongExtra("key", 0L));
+            note.setId(data.getLongExtra("id", 0L));
             note.setText(data.getStringExtra("text"));
             refreshDisplay();
         }
@@ -112,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         NoteItem note = NoteItem.newInstance();
         Intent intent = new Intent(this, NoteEditorActivity.class);
-        intent.putExtra("key", note.getId());
+        intent.putExtra("id", note.getId());
         intent.putExtra("text", note.getText());
         startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
     }
@@ -140,6 +122,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
             ((TextView) dragView.findViewById(R.id.text)).setText(text);
             dragView.setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
+        }
+    }
+
+    public class NoteItemDragListListenerAdapter implements DragListView.DragListListener {
+        private NoteItem currentNoteItem;
+
+        @Override
+        public void onItemDragStarted(int position) {
+            currentNoteItem = noteItemDataSource.getNoteByDisplayPosition(position);
+        }
+
+        @Override
+        public void onItemDragging(int itemPosition, float x, float y) {
+        }
+
+        @Override
+        public void onItemDragEnded(int fromPosition, int toPosition) {
+            if (fromPosition != toPosition) {
+                noteItemDataSource.updateNoteDisplayPosition(currentNoteItem, fromPosition, toPosition);
+            }
         }
     }
 }

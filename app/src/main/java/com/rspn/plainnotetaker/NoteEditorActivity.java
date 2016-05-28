@@ -34,7 +34,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
         note = new NoteItem();
-        note.setKey(intent.getLongExtra("key", 0L));
+        note.setId(intent.getLongExtra("id", 0L));
         note.setText(intent.getStringExtra("text"));
 
         EditText editText = (EditText) findViewById(R.id.noteText);
@@ -76,11 +76,10 @@ public class NoteEditorActivity extends AppCompatActivity {
         String noteText = et.getText().toString();
 
         Intent intent = new Intent();
-        intent.putExtra("key", note.getId());
+        intent.putExtra("id", note.getId());
         intent.putExtra("text", noteText);
         setResult(RESULT_OK, intent);
         finish();
-
     }
 
     @Override

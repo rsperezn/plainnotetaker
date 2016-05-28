@@ -71,7 +71,7 @@ public class NoteItemContextMenu extends DialogFragment implements View.OnClickL
     }
 
     private String getNoteText(long noteId) {
-        return notesDataSource.getNoteItemText(noteId).getText();
+        return notesDataSource.getNoteTextById(noteId).getText();
     }
 
     @Override
