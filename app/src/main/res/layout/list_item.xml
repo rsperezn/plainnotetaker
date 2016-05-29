@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_drag_and_drop" />
 
     <TextView
         android:id="@+id/text"
