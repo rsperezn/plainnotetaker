@@ -1,17 +1,15 @@
 package com.rspn.plainnotetaker.data;
 
-import android.annotation.SuppressLint;
-
 import java.util.Date;
 
-public class NoteItem {
+public class Note {
 
     private long id;
     private String text;
     private int displayPosition;
 
-    public static NoteItem newInstance() {
-        NoteItem note = new NoteItem();
+    public static Note newInstance() {
+        Note note = new Note();
         note.setId(new Date().getTime());
         note.setText("");
         return note;

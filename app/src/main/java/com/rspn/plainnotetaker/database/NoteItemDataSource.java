@@ -7,7 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +43,11 @@ public class NoteItemDataSource {
         dbHelper.close();
     }
 
-    private void createNote(NoteItem noteItem) {
+    private void createNote(Note note) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NOTE_ID, noteItem.getId());
+        values.put(COLUMN_NOTE_ID, note.getId());
         values.put(COLUMN_TITLE, "sample title");
-        values.put(COLUMN_TEXT, noteItem.getText());
+        values.put(COLUMN_TEXT, note.getText());
         values.put(COLUMN_DISPLAY_POSITION, getDisplayPosition());
         values.put(COLUMN_COLOR, "#OFFFFF");
 
@@ -79,8 +79,8 @@ public class NoteItemDataSource {
                 null);
     }
 
-    public List<NoteItem> getAllNoteItems() {
-        List<NoteItem> noteItems = new ArrayList<>();
+    public List<Note> getAllNoteItems() {
+        List<Note> notes = new ArrayList<>();
 
         Cursor cursor = database.query(
                 TABLE_NOTES,
@@ -93,24 +93,24 @@ public class NoteItemDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NoteItem noteItem = cursorToNoteItem(cursor);
-            noteItems.add(noteItem);
+            Note note = cursorToNoteItem(cursor);
+            notes.add(note);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return noteItems;
+        return notes;
     }
 
-    private NoteItem cursorToNoteItem(Cursor cursor) {
-        NoteItem noteItem = new NoteItem();
-        noteItem.setId(cursor.getLong(0));
-        noteItem.setText(cursor.getString(2));
-        noteItem.setDisplayPosition(cursor.getInt(3));
-        return noteItem;
+    private Note cursorToNoteItem(Cursor cursor) {
+        Note note = new Note();
+        note.setId(cursor.getLong(0));
+        note.setText(cursor.getString(2));
+        note.setDisplayPosition(cursor.getInt(3));
+        return note;
     }
 
-    public void createOrUpdate(NoteItem note) {
+    public void createOrUpdate(Note note) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_TEXT, note.getText()); //These Fields should be your String values of actual column names
         int rowsAffected = database.update(TABLE_NOTES, cv, COLUMN_NOTE_ID + " = " + note.getId(), null);
@@ -123,33 +123,33 @@ public class NoteItemDataSource {
         return DatabaseUtils.queryNumEntries(database, TABLE_NOTES) == 0L;
     }
 
-    public NoteItem getNoteTextById(long noteId) {
-        NoteItem noteItem = null;
+    public Note getNoteTextById(long noteId) {
+        Note note = null;
         String selectQuery = "SELECT * FROM " + TABLE_NOTES
                 + " WHERE " + COLUMN_NOTE_ID + " = ?";
         Cursor cursor = database.rawQuery(selectQuery, new String[]{String.valueOf(noteId)});
         if (cursor.moveToFirst()) {
-            noteItem = cursorToNoteItem(cursor);
+            note = cursorToNoteItem(cursor);
         }
         cursor.close();
-        return noteItem;
+        return note;
     }
 
-    public NoteItem getNoteByDisplayPosition(int displayPosition) {
-        NoteItem noteItem = null;
+    public Note getNoteByDisplayPosition(int displayPosition) {
+        Note note = null;
         String selectQuery = "SELECT * FROM " + TABLE_NOTES
                 + " WHERE " + COLUMN_DISPLAY_POSITION + " = ?";
         Cursor cursor = database.rawQuery(selectQuery, new String[]{String.valueOf(displayPosition)});
         if (cursor.moveToFirst()) {
-            noteItem = cursorToNoteItem(cursor);
+            note = cursorToNoteItem(cursor);
         }
         cursor.close();
-        return noteItem;
+        return note;
     }
 
-    public void updateNoteDisplayPosition(NoteItem currentNoteItem, int fromPosition, int toPosition) {
-        updateDraggedNoteDisplayPosition(currentNoteItem.getDisplayPosition(), toPosition);
-        updateRemainingNoteDisplayPosition(currentNoteItem.getId(), fromPosition, toPosition);
+    public void updateNoteDisplayPosition(Note currentNote, int fromPosition, int toPosition) {
+        updateDraggedNoteDisplayPosition(currentNote.getDisplayPosition(), toPosition);
+        updateRemainingNoteDisplayPosition(currentNote.getId(), fromPosition, toPosition);
     }
 
     private void updateDraggedNoteDisplayPosition(int currentDisplayPosition, int newDisplayPosition) {
@@ -161,7 +161,7 @@ public class NoteItemDataSource {
 
     private void updateRemainingNoteDisplayPosition(long excludedId, int fromPosition, int toPosition) {
         long deltaDisplayPosition;
-        List<NoteItem> noteItemsToUpdate = new ArrayList<>();
+        List<Note> noteItemsToUpdate = new ArrayList<>();
         String selectQuery;
         if (fromPosition < toPosition) {
             selectQuery = "SELECT * FROM " + TABLE_NOTES
@@ -181,18 +181,18 @@ public class NoteItemDataSource {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NoteItem noteItem = cursorToNoteItem(cursor);
-            noteItemsToUpdate.add(noteItem);
+            Note note = cursorToNoteItem(cursor);
+            noteItemsToUpdate.add(note);
             cursor.moveToNext();
         }
         cursor.close();
 
         ContentValues contentValues;
-        for (NoteItem noteItem : noteItemsToUpdate) {
+        for (Note note : noteItemsToUpdate) {
             contentValues = new ContentValues();
-            long newPosition = noteItem.getDisplayPosition() + deltaDisplayPosition;
+            long newPosition = note.getDisplayPosition() + deltaDisplayPosition;
             contentValues.put(COLUMN_DISPLAY_POSITION, newPosition);
-            database.update(TABLE_NOTES, contentValues, COLUMN_NOTE_ID + " = " + noteItem.getId(), null);
+            database.update(TABLE_NOTES, contentValues, COLUMN_NOTE_ID + " = " + note.getId(), null);
         }
     }
 }

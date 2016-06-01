@@ -11,7 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.Note;
 import com.rspn.plainnotetaker.database.NoteItemDataSource;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int EDITOR_ACTIVITY_REQUEST = 1001;
     private TextView gettingStarted_tv;
     private DragListView dragListView;
-    private ArrayList<Pair<Long, NoteItem>> mItemArray;
+    private ArrayList<Pair<Long, Note>> mItemArray;
     private NoteItemDataSource noteItemDataSource;
 
     @Override
@@ -70,11 +70,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!noteItemDataSource.isEmpty()) {
             gettingStarted_tv.setVisibility(View.GONE);
         }
-        List<NoteItem> notesList = noteItemDataSource.getAllNoteItems();
+        List<Note> notesList = noteItemDataSource.getAllNoteItems();
         mItemArray = new ArrayList<>();
 
-        for (NoteItem noteItem : notesList) {
-            mItemArray.add(new Pair<>(noteItem.getId(), noteItem));
+        for (Note note : notesList) {
+            mItemArray.add(new Pair<>(note.getId(), note));
         }
         ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, this);
         dragListView.setAdapter(listAdapter, true);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
-            NoteItem note = new NoteItem();
+            Note note = new Note();
             note.setId(data.getLongExtra("id", 0L));
             note.setText(data.getStringExtra("text"));
             refreshDisplay();
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        NoteItem note = NoteItem.newInstance();
+        Note note = Note.newInstance();
         Intent intent = new Intent(this, NoteEditorActivity.class);
         intent.putExtra("id", note.getId());
         intent.putExtra("text", note.getText());
@@ -126,11 +126,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public class NoteItemDragListListenerAdapter implements DragListView.DragListListener {
-        private NoteItem currentNoteItem;
+        private Note currentNote;
 
         @Override
         public void onItemDragStarted(int position) {
-            currentNoteItem = noteItemDataSource.getNoteByDisplayPosition(position);
+            currentNote = noteItemDataSource.getNoteByDisplayPosition(position);
         }
 
         @Override
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onItemDragEnded(int fromPosition, int toPosition) {
             if (fromPosition != toPosition) {
-                noteItemDataSource.updateNoteDisplayPosition(currentNoteItem, fromPosition, toPosition);
+                noteItemDataSource.updateNoteDisplayPosition(currentNote, fromPosition, toPosition);
             }
         }
     }

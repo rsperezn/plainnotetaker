@@ -10,14 +10,14 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.Note;
 import com.rspn.plainnotetaker.database.NoteItemDataSource;
 
 import java.util.Calendar;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
-    private NoteItem note;
+    private Note note;
     private NoteItemDataSource dataSource;
     private TextView edited_tv;
 
@@ -33,7 +33,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         dataSource.open();
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
-        note = new NoteItem();
+        note = new Note();
         note.setId(intent.getLongExtra("id", 0L));
         note.setText(intent.getStringExtra("text"));
 

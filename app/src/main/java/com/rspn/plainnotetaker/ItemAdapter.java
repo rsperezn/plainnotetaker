@@ -25,20 +25,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.NoteItem;
+import com.rspn.plainnotetaker.data.Note;
 import com.rspn.plainnotetaker.database.NoteItemDataSource;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 
-public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapter.ViewHolder> {
+public class ItemAdapter extends DragItemAdapter<Pair<Long, Note>, ItemAdapter.ViewHolder> {
 
     private static final boolean dragOnLongPress = false;
     private final int mLayoutId;
     private final int mGrabHandleId;
     private final Activity activity;
 
-    public ItemAdapter(ArrayList<Pair<Long, NoteItem>> list, int layoutId, int grabHandleId, Activity activity) {
+    public ItemAdapter(ArrayList<Pair<Long, Note>> list, int layoutId, int grabHandleId, Activity activity) {
         super(dragOnLongPress);
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
@@ -66,7 +66,7 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
         return mItemList.get(position).first;
     }
 
-    public class ViewHolder extends DragItemAdapter<Pair<Long, NoteItem>, ViewHolder>.ViewHolder {
+    public class ViewHolder extends DragItemAdapter<Pair<Long, Note>, ViewHolder>.ViewHolder {
         public final TextView mText;
         private final NoteItemDataSource notesDataSource;
 
@@ -79,17 +79,17 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, NoteItem>, ItemAdapt
         @Override
         public void onItemClicked(View view) {
             notesDataSource.open();
-            NoteItem noteItem = notesDataSource.getNoteTextById(getItemId());
+            Note note = notesDataSource.getNoteTextById(getItemId());
             Intent intent = new Intent(view.getContext(), NoteEditorActivity.class);
-            intent.putExtra("id", noteItem.getId());
-            intent.putExtra("text", noteItem.getText());
+            intent.putExtra("id", note.getId());
+            intent.putExtra("text", note.getText());
             activity.startActivityForResult(intent, MainActivity.EDITOR_ACTIVITY_REQUEST);
         }
 
         @Override
         public boolean onItemLongClicked(View view) {
             FragmentManager manager = activity.getFragmentManager();
-            NoteItemContextMenu dialog = NoteItemContextMenu.newInstance(getItemId());
+            NoteContextMenu dialog = NoteContextMenu.newInstance(getItemId());
             dialog.show(manager, "dialog");
             return true;
         }

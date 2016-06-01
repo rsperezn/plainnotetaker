@@ -12,15 +12,15 @@ import android.widget.LinearLayout;
 import com.rspn.plainnotetaker.database.NoteItemDataSource;
 
 
-public class NoteItemContextMenu extends DialogFragment implements View.OnClickListener {
+public class NoteContextMenu extends DialogFragment implements View.OnClickListener {
 
     private static NoteItemDataSource notesDataSource;
 
-    public NoteItemContextMenu() {
+    public NoteContextMenu() {
     }
 
-    public static NoteItemContextMenu newInstance(long request) {
-        NoteItemContextMenu fragment = new NoteItemContextMenu();
+    public static NoteContextMenu newInstance(long request) {
+        NoteContextMenu fragment = new NoteContextMenu();
         Bundle args = new Bundle();
         args.putLong("noteId", request);
         fragment.setArguments(args);
