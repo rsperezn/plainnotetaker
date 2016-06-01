@@ -66,9 +66,8 @@ public class NoteEditorActivity extends AppCompatActivity {
         String formattedMinutes = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
         return getString(
                 R.string.autosaved,
-                calendar.get(Calendar.HOUR),
-                formattedMinutes,
-                calendar.get(Calendar.AM_PM) == 1 ? "PM" : "AM");
+                calendar.get(Calendar.HOUR_OF_DAY),
+                formattedMinutes);
     }
 
     private void saveAndFinish() {
