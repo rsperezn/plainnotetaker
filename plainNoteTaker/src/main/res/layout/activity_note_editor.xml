@@ -8,19 +8,19 @@
         android:id="@+id/textView_editedTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_gravity="right"
         android:text="@string/hint_autosaved"
-        android:layout_gravity="right" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
         android:id="@+id/noteText"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:ems="10" 
-        android:singleLine="false"
         android:gravity="top"
-        android:inputType="textMultiLine"
         android:hint="@string/hint_note"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
         >
 
         <requestFocus />

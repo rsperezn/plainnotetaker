@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <TextView
@@ -28,19 +28,19 @@
             android:layout_height="match_parent"/>
     </FrameLayout>
     <android.support.design.widget.FloatingActionButton
-        android:src="@drawable/ic_done"
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        app:layout_anchorGravity="bottom|right|end"
-        app:backgroundTint="#0288d1"
-        app:rippleColor="#FFF"
-        android:layout_marginRight="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="45dp"
         android:layout_marginEnd="45dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginRight="45dp"
+        android:clickable="true"
+        android:src="@drawable/ic_done"
+        app:backgroundTint="#0288d1"
+        app:layout_anchorGravity="bottom|right|end"
+        app:rippleColor="#FFF" />
 
 </RelativeLayout>
