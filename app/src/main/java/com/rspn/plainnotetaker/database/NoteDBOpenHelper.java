@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class NoteItemDBOpenHelper extends SQLiteOpenHelper {
+public class NoteDBOpenHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_NOTES = "note";
     public static final String COLUMN_NOTE_ID = "noteId";
@@ -27,7 +27,7 @@ public class NoteItemDBOpenHelper extends SQLiteOpenHelper {
             + COLUMN_COLOR + " TEXT"
             + " );";
 
-    public NoteItemDBOpenHelper(Context context) {
+    public NoteDBOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -38,7 +38,7 @@ public class NoteItemDBOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.i(NoteItemDBOpenHelper.class.getName(),
+        Log.i(NoteDBOpenHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES);

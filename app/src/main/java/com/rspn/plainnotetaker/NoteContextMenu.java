@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.rspn.plainnotetaker.database.NoteItemDataSource;
+import com.rspn.plainnotetaker.database.NoteDataSource;
 
 
 public class NoteContextMenu extends DialogFragment implements View.OnClickListener {
 
-    private static NoteItemDataSource notesDataSource;
+    private static NoteDataSource notesDataSource;
 
     public NoteContextMenu() {
     }
@@ -34,7 +34,7 @@ public class NoteContextMenu extends DialogFragment implements View.OnClickListe
         LinearLayout share_ll = (LinearLayout) view.findViewById(R.id.share_LinearLayout);
         delete_ll.setOnClickListener(this);
         share_ll.setOnClickListener(this);
-        notesDataSource = new NoteItemDataSource(getActivity());
+        notesDataSource = new NoteDataSource(getActivity());
         return view;
     }
 
@@ -61,7 +61,7 @@ public class NoteContextMenu extends DialogFragment implements View.OnClickListe
                 break;
 
             case R.id.delete_LinearLayout:
-                notesDataSource.deleteNoteItem(noteId);
+                notesDataSource.deleteNote(noteId);
                 ((MainActivity) getActivity()).refreshDisplay();
                 dismiss();
                 break;
@@ -71,7 +71,7 @@ public class NoteContextMenu extends DialogFragment implements View.OnClickListe
     }
 
     private String getNoteText(long noteId) {
-        return notesDataSource.getNoteTextById(noteId).getText();
+        return notesDataSource.getNoteById(noteId).getText();
     }
 
     @Override

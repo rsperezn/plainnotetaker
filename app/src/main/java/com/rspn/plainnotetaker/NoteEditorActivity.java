@@ -11,14 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rspn.plainnotetaker.data.Note;
-import com.rspn.plainnotetaker.database.NoteItemDataSource;
+import com.rspn.plainnotetaker.database.NoteDataSource;
 
 import java.util.Calendar;
 
 public class NoteEditorActivity extends AppCompatActivity {
 
     private Note note;
-    private NoteItemDataSource dataSource;
+    private NoteDataSource dataSource;
     private TextView edited_tv;
 
     @Override
@@ -29,7 +29,7 @@ public class NoteEditorActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        dataSource = new NoteItemDataSource(this);
+        dataSource = new NoteDataSource(this);
         dataSource.open();
         edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
