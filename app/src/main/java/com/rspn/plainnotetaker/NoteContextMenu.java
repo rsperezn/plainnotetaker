@@ -78,4 +78,13 @@ public class NoteContextMenu extends DialogFragment implements View.OnClickListe
     public void onDismiss(DialogInterface dialog) {
         notesDataSource.close();
     }
+
+    /*Work around to dismiss the dialog when clicking outside of its boundaries.
+     Otherwise it will only put it in the back of the stack*/
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        notesDataSource.close();
+        dismiss();
+    }
 }
