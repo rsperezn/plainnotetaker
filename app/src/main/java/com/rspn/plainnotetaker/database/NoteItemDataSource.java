@@ -73,10 +73,17 @@ public class NoteItemDataSource {
     }
 
     public void deleteNoteItem(long noteId) {
+        Note note = getNoteTextById(noteId);
         database.delete(
                 TABLE_NOTES,
                 COLUMN_NOTE_ID + " = " + noteId,
                 null);
+        String query = "UPDATE " + TABLE_NOTES + " SET " + COLUMN_DISPLAY_POSITION + " = " + COLUMN_DISPLAY_POSITION + " -1 " +
+                " WHERE " + COLUMN_DISPLAY_POSITION + " > " + note.getDisplayPosition();
+        Cursor cursor = database.rawQuery(query, null);
+        cursor.moveToFirst();//if the cursor is not moved it wont update the database
+        cursor.close();
+
     }
 
     public List<Note> getAllNoteItems() {
