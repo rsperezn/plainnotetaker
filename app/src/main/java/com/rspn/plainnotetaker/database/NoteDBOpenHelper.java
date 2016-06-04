@@ -11,7 +11,7 @@ public class NoteDBOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_NOTE_ID = "noteId";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_TEXT = "noteText";
-    public static final String COLUMN_DISPLAY_POSITION = "displayOrder";
+    public static final String COLUMN_DISPLAY_ORDER = "displayOrder";
     public static final String COLUMN_COLOR = "color";
 
     private static final String DATABASE_NAME = "note_db";
@@ -23,7 +23,7 @@ public class NoteDBOpenHelper extends SQLiteOpenHelper {
             + COLUMN_NOTE_ID + " INTEGER PRIMARY KEY, "
             + COLUMN_TITLE + " TEXT, "
             + COLUMN_TEXT + " TEXT, "
-            + COLUMN_DISPLAY_POSITION + " INTEGER, "
+            + COLUMN_DISPLAY_ORDER + " INTEGER, "
             + COLUMN_COLOR + " TEXT"
             + " );";
 

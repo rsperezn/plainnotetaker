@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_COLOR;
-import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_DISPLAY_POSITION;
+import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_DISPLAY_ORDER;
 import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_NOTE_ID;
 import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_TEXT;
 import static com.rspn.plainnotetaker.database.NoteDBOpenHelper.COLUMN_TITLE;
@@ -26,7 +26,7 @@ public class NoteDataSource {
             COLUMN_NOTE_ID,
             COLUMN_TITLE,
             COLUMN_TEXT,
-            COLUMN_DISPLAY_POSITION,
+            COLUMN_DISPLAY_ORDER,
             COLUMN_COLOR,
     };
     private SQLiteDatabase database;
@@ -48,7 +48,7 @@ public class NoteDataSource {
         values.put(COLUMN_NOTE_ID, note.getId());
         values.put(COLUMN_TITLE, "sample title");
         values.put(COLUMN_TEXT, note.getText());
-        values.put(COLUMN_DISPLAY_POSITION, getDisplayPosition());
+        values.put(COLUMN_DISPLAY_ORDER, getDisplayPosition());
         values.put(COLUMN_COLOR, "#OFFFFF");
 
         long insertId = database.insert(
@@ -78,8 +78,8 @@ public class NoteDataSource {
                 TABLE_NOTES,
                 COLUMN_NOTE_ID + " = " + noteId,
                 null);
-        String query = "UPDATE " + TABLE_NOTES + " SET " + COLUMN_DISPLAY_POSITION + " = " + COLUMN_DISPLAY_POSITION + " -1 " +
-                " WHERE " + COLUMN_DISPLAY_POSITION + " > " + note.getDisplayPosition();
+        String query = "UPDATE " + TABLE_NOTES + " SET " + COLUMN_DISPLAY_ORDER + " = " + COLUMN_DISPLAY_ORDER + " -1 " +
+                " WHERE " + COLUMN_DISPLAY_ORDER + " > " + note.getDisplayOrder();
         Cursor cursor = database.rawQuery(query, null);
         cursor.moveToFirst();//if the cursor is not moved it wont update the database
         cursor.close();
@@ -96,7 +96,7 @@ public class NoteDataSource {
                 null,
                 null,
                 null,
-                COLUMN_DISPLAY_POSITION + " ASC");
+                COLUMN_DISPLAY_ORDER + " ASC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -113,7 +113,7 @@ public class NoteDataSource {
         Note note = new Note();
         note.setId(cursor.getLong(0));
         note.setText(cursor.getString(2));
-        note.setDisplayPosition(cursor.getInt(3));
+        note.setDisplayOrder(cursor.getInt(3));
         return note;
     }
 
@@ -145,7 +145,7 @@ public class NoteDataSource {
     public Note getNoteByDisplayPosition(int displayPosition) {
         Note note = null;
         String selectQuery = "SELECT * FROM " + TABLE_NOTES
-                + " WHERE " + COLUMN_DISPLAY_POSITION + " = ?";
+                + " WHERE " + COLUMN_DISPLAY_ORDER + " = ?";
         Cursor cursor = database.rawQuery(selectQuery, new String[]{String.valueOf(displayPosition)});
         if (cursor.moveToFirst()) {
             note = cursorToNote(cursor);
@@ -155,15 +155,15 @@ public class NoteDataSource {
     }
 
     public void updateNoteDisplayPosition(Note currentNote, int fromPosition, int toPosition) {
-        updateDraggedNoteDisplayPosition(currentNote.getDisplayPosition(), toPosition);
+        updateDraggedNoteDisplayPosition(currentNote.getDisplayOrder(), toPosition);
         updateRemainingNoteDisplayPosition(currentNote.getId(), fromPosition, toPosition);
     }
 
     private void updateDraggedNoteDisplayPosition(int currentDisplayPosition, int newDisplayPosition) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_DISPLAY_POSITION, newDisplayPosition);
+        cv.put(COLUMN_DISPLAY_ORDER, newDisplayPosition);
         database.update(TABLE_NOTES, cv,
-                COLUMN_DISPLAY_POSITION + " = " + currentDisplayPosition, null);
+                COLUMN_DISPLAY_ORDER + " = " + currentDisplayPosition, null);
     }
 
     private void updateRemainingNoteDisplayPosition(long excludedId, int fromPosition, int toPosition) {
@@ -173,14 +173,14 @@ public class NoteDataSource {
         if (fromPosition < toPosition) {
             selectQuery = "SELECT * FROM " + TABLE_NOTES
                     + " WHERE " + COLUMN_NOTE_ID + " <> ?"
-                    + " AND " + COLUMN_DISPLAY_POSITION + " <= ?"
-                    + " AND " + COLUMN_DISPLAY_POSITION + " > ?";
+                    + " AND " + COLUMN_DISPLAY_ORDER + " <= ?"
+                    + " AND " + COLUMN_DISPLAY_ORDER + " > ?";
             deltaDisplayPosition = -1L;
         } else {
             selectQuery = "SELECT * FROM " + TABLE_NOTES
                     + " WHERE " + COLUMN_NOTE_ID + " <> ?"
-                    + " AND " + COLUMN_DISPLAY_POSITION + " >= ?"
-                    + " AND " + COLUMN_DISPLAY_POSITION + " < ?";
+                    + " AND " + COLUMN_DISPLAY_ORDER + " >= ?"
+                    + " AND " + COLUMN_DISPLAY_ORDER + " < ?";
             deltaDisplayPosition = 1L;
         }
 
@@ -197,8 +197,8 @@ public class NoteDataSource {
         ContentValues contentValues;
         for (Note note : notesToUpdate) {
             contentValues = new ContentValues();
-            long newPosition = note.getDisplayPosition() + deltaDisplayPosition;
-            contentValues.put(COLUMN_DISPLAY_POSITION, newPosition);
+            long newPosition = note.getDisplayOrder() + deltaDisplayPosition;
+            contentValues.put(COLUMN_DISPLAY_ORDER, newPosition);
             database.update(TABLE_NOTES, contentValues, COLUMN_NOTE_ID + " = " + note.getId(), null);
         }
     }

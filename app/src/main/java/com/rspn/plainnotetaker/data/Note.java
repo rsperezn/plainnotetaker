@@ -6,7 +6,7 @@ public class Note {
 
     private long id;
     private String text;
-    private int displayPosition;
+    private int displayOrder;
 
     public static Note newInstance() {
         Note note = new Note();
@@ -31,12 +31,12 @@ public class Note {
         this.text = text;
     }
 
-    public int getDisplayPosition() {
-        return displayPosition;
+    public int getDisplayOrder() {
+        return displayOrder;
     }
 
-    public void setDisplayPosition(int displayPosition) {
-        this.displayPosition = displayPosition;
+    public void setDisplayOrder(int displayOrder) {
+        this.displayOrder = displayOrder;
     }
 
     @Override
