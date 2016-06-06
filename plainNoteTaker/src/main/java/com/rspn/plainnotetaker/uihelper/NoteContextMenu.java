@@ -31,7 +31,7 @@ public class NoteContextMenu extends DialogFragment implements View.OnClickListe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.note_item_context_menu, null, false);
+        View view = inflater.inflate(R.layout.note_context_menu, null, false);
         LinearLayout delete_ll = (LinearLayout) view.findViewById(R.id.delete_LinearLayout);
         LinearLayout share_ll = (LinearLayout) view.findViewById(R.id.share_LinearLayout);
         delete_ll.setOnClickListener(this);
