@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.rspn.plainnotetaker;
+package com.rspn.plainnotetaker.uihelper;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -25,7 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.Note;
+import com.rspn.plainnotetaker.MainActivity;
+import com.rspn.plainnotetaker.NoteEditorActivity;
+import com.rspn.plainnotetaker.R;
+import com.rspn.plainnotetaker.model.Note;
 import com.rspn.plainnotetaker.database.NoteDataSource;
 import com.woxthebox.draglistview.DragItemAdapter;
 

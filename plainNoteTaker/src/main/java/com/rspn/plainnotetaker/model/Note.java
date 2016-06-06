@@ -1,4 +1,4 @@
-package com.rspn.plainnotetaker.data;
+package com.rspn.plainnotetaker.model;
 
 import java.util.Date;
 

@@ -11,8 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.Note;
+import com.rspn.plainnotetaker.model.Note;
 import com.rspn.plainnotetaker.database.NoteDataSource;
+import com.rspn.plainnotetaker.uihelper.ItemAdapter;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 

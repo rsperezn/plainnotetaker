@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.data.Note;
+import com.rspn.plainnotetaker.model.Note;
 import com.rspn.plainnotetaker.database.NoteDataSource;
 
 import java.util.Calendar;

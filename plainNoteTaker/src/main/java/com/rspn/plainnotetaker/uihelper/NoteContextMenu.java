@@ -1,4 +1,4 @@
-package com.rspn.plainnotetaker;
+package com.rspn.plainnotetaker.uihelper;
 
 import android.app.DialogFragment;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.rspn.plainnotetaker.MainActivity;
+import com.rspn.plainnotetaker.R;
 import com.rspn.plainnotetaker.database.NoteDataSource;
 
 

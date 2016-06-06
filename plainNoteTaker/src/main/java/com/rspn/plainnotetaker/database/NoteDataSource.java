@@ -7,7 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.rspn.plainnotetaker.data.Note;
+import com.rspn.plainnotetaker.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
