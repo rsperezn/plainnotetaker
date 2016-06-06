@@ -74,13 +74,7 @@ public class NoteEditorActivity extends AppCompatActivity {
     }
 
     private void saveAndFinish() {
-        EditText et = (EditText) findViewById(R.id.noteText);
-        String noteText = et.getText().toString();
-
-        Intent intent = new Intent();
-        intent.putExtra("id", note.getId());
-        intent.putExtra("text", noteText);
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_OK);
         finish();
     }
 

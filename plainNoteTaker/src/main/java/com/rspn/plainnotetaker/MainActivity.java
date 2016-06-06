@@ -84,9 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
-            Note note = new Note();
-            note.setId(data.getLongExtra("id", 0L));
-            note.setText(data.getStringExtra("text"));
             refreshDisplay();
         }
     }
