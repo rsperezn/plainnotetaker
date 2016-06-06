@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="line_separator">#0097c9</color>
+    <color name="primary_color">#0097c9</color>
     <color name="list_item_background">#AACCCCCC</color>
 
 </resources>

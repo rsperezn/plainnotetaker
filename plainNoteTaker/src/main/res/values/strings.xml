@@ -9,5 +9,6 @@
     <string name="hint_autosaved">Autosaved</string>
     <string name="action_delete">Delete</string>
     <string name="action_share">Share</string>
+    <string name="noteTitle">Untitled note</string>
 
 </resources>

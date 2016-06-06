@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.rspn.plainnotetaker.model.Note;
 import com.rspn.plainnotetaker.database.NoteDataSource;
+import com.rspn.plainnotetaker.model.Note;
 
 import java.util.Calendar;
 
@@ -27,6 +27,9 @@ public class NoteEditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_editor);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
+            supportActionBar.setCustomView(R.layout.note_editor_actionbar);
+            EditText noteTitle_edit = (EditText) supportActionBar.getCustomView().findViewById(R.id.noteTitle);
+            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         dataSource = new NoteDataSource(this);
