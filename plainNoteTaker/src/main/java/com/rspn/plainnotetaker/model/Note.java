@@ -7,6 +7,7 @@ public class Note {
     private long id;
     private String text;
     private int displayOrder;
+    private String title;
 
     public static Note newInstance() {
         Note note = new Note();
@@ -37,6 +38,14 @@ public class Note {
 
     public void setDisplayOrder(int displayOrder) {
         this.displayOrder = displayOrder;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

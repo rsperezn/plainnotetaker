@@ -29,6 +29,24 @@ public class NoteEditorActivity extends AppCompatActivity {
         if (supportActionBar != null) {
             supportActionBar.setCustomView(R.layout.note_editor_actionbar);
             EditText noteTitle_edit = (EditText) supportActionBar.getCustomView().findViewById(R.id.noteTitle);
+            noteTitle_edit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    note.setTitle(charSequence.toString());
+                    dataSource.createOrUpdate(note);
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    Calendar calendar = Calendar.getInstance();
+                    edited_tv.setText(getString(calendar));
+                }
+            });
+
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -58,7 +76,6 @@ public class NoteEditorActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 Calendar calendar = Calendar.getInstance();
-
                 edited_tv.setText(getString(calendar));
             }
         });

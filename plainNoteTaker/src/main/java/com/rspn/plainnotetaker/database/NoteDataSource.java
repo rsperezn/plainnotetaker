@@ -48,7 +48,7 @@ public class NoteDataSource {
         values.put(COLUMN_NOTE_ID, note.getId());
         values.put(COLUMN_TITLE, "sample title");
         values.put(COLUMN_TEXT, note.getText());
-        values.put(COLUMN_DISPLAY_ORDER, getDisplayPosition());
+        values.put(COLUMN_DISPLAY_ORDER, calculateDisplayOrder());
         values.put(COLUMN_COLOR, "#OFFFFF");
 
         long insertId = database.insert(
@@ -67,9 +67,8 @@ public class NoteDataSource {
         cursor.close();
     }
 
-    private long getDisplayPosition() {
-        long newPosition = isEmpty() ? 0 : DatabaseUtils.queryNumEntries(database, TABLE_NOTES);
-        return newPosition;
+    private long calculateDisplayOrder() {
+        return isEmpty() ? 0 : DatabaseUtils.queryNumEntries(database, TABLE_NOTES);
     }
 
     public void deleteNote(long noteId) {
@@ -112,15 +111,17 @@ public class NoteDataSource {
     private Note cursorToNote(Cursor cursor) {
         Note note = new Note();
         note.setId(cursor.getLong(0));
+        note.setTitle(cursor.getString(1));
         note.setText(cursor.getString(2));
         note.setDisplayOrder(cursor.getInt(3));
         return note;
     }
 
     public void createOrUpdate(Note note) {
-        ContentValues cv = new ContentValues();
-        cv.put(COLUMN_TEXT, note.getText()); //These Fields should be your String values of actual column names
-        int rowsAffected = database.update(TABLE_NOTES, cv, COLUMN_NOTE_ID + " = " + note.getId(), null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_TEXT, note.getText());
+        contentValues.put(COLUMN_TITLE, note.getTitle());
+        int rowsAffected = database.update(TABLE_NOTES, contentValues, COLUMN_NOTE_ID + " = " + note.getId(), null);
         if (rowsAffected == 0) {
             createNote(note);
         }
