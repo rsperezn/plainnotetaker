@@ -19,75 +19,33 @@ public class NoteEditorActivity extends AppCompatActivity {
 
     private Note note;
     private NoteDataSource dataSource;
-    private TextView edited_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_editor);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setCustomView(R.layout.note_editor_actionbar);
-            EditText noteTitle_edit = (EditText) supportActionBar.getCustomView().findViewById(R.id.noteTitle);
-            noteTitle_edit.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    note.setTitle(charSequence.toString());
-                    dataSource.createOrUpdate(note);
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    Calendar calendar = Calendar.getInstance();
-                    edited_tv.setText(getString(calendar));
-                }
-            });
-
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        dataSource = new NoteDataSource(this);
-        dataSource.open();
-        edited_tv = (TextView) findViewById(R.id.textView_editedTime);
         Intent intent = this.getIntent();
         note = new Note();
         note.setId(intent.getLongExtra("id", 0L));
         note.setText(intent.getStringExtra("text"));
+        dataSource = new NoteDataSource(this);
+        dataSource.open();
+        TextView autosaved_tv = (TextView) findViewById(R.id.textView_editedTime);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setCustomView(R.layout.note_editor_actionbar);
+            EditText noteTitle_edit = (EditText) supportActionBar.getCustomView().findViewById(R.id.noteTitle);
+            noteTitle_edit.addTextChangedListener(new TitleTextWatcher(note, autosaved_tv, this, dataSource));
+
+            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         EditText editText = (EditText) findViewById(R.id.noteText);
 
         editText.setText(note.getText());
         editText.setSelection(note.getText().length());
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                note.setText(charSequence.toString());
-                dataSource.createOrUpdate(note);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                Calendar calendar = Calendar.getInstance();
-                edited_tv.setText(getString(calendar));
-            }
-        });
-    }
-
-    private String getString(Calendar calendar) {
-        int minute = calendar.get(Calendar.MINUTE);
-        String formattedMinutes = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
-        return getString(
-                R.string.autosaved,
-                calendar.get(Calendar.HOUR_OF_DAY),
-                formattedMinutes);
+        editText.addTextChangedListener(new MainTextWatcher(note, autosaved_tv, this, dataSource));
     }
 
     private void saveAndFinish() {
