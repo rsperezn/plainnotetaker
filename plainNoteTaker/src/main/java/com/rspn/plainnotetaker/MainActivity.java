@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.rspn.plainnotetaker.model.Note;
 import com.rspn.plainnotetaker.database.NoteDataSource;
 import com.rspn.plainnotetaker.uihelper.ItemAdapter;
+import com.rspn.plainnotetaker.uihelper.NoteDragListListenerAdapter;
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 
@@ -33,7 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dragListView = (DragListView) findViewById(R.id.drag_list_view);
-        dragListView.setDragListListener(new NoteDragListListenerAdapter());
+        noteDataSource = new NoteDataSource(this);
+        dragListView.setDragListListener(new NoteDragListListenerAdapter(noteDataSource));
 
         dragListView.setLayoutManager(new LinearLayoutManager(this));
         ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, this);
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FloatingActionButton plus_fb = (FloatingActionButton) findViewById(R.id.fab);
         plus_fb.setOnClickListener(this);
 
-        noteDataSource = new NoteDataSource(this);
         setActionBarLogo();
         refreshDisplay();
         setupListRecyclerView();
@@ -120,26 +121,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
             ((TextView) dragView.findViewById(R.id.text)).setText(text);
             dragView.setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
-        }
-    }
-
-    public class NoteDragListListenerAdapter implements DragListView.DragListListener {
-        private Note currentNote;
-
-        @Override
-        public void onItemDragStarted(int position) {
-            currentNote = noteDataSource.getNoteByDisplayPosition(position);
-        }
-
-        @Override
-        public void onItemDragging(int itemPosition, float x, float y) {
-        }
-
-        @Override
-        public void onItemDragEnded(int fromPosition, int toPosition) {
-            if (fromPosition != toPosition) {
-                noteDataSource.updateNoteDisplayPosition(currentNote, fromPosition, toPosition);
-            }
         }
     }
 }
