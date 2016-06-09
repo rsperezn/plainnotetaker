@@ -60,7 +60,9 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Note>, ItemAdapter.V
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         String text = mItemList.get(position).second.getText();
+        String title = mItemList.get(position).second.getTitle();
         holder.mText.setText(text);
+        holder.mTitle.setText(title);
         holder.itemView.setTag(text);
     }
 
@@ -71,11 +73,13 @@ public class ItemAdapter extends DragItemAdapter<Pair<Long, Note>, ItemAdapter.V
 
     public class ViewHolder extends DragItemAdapter<Pair<Long, Note>, ViewHolder>.ViewHolder {
         public final TextView mText;
+        public final TextView mTitle;
         private final NoteDataSource notesDataSource;
 
         public ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId);
             mText = (TextView) itemView.findViewById(R.id.text);
+            mTitle = (TextView) itemView.findViewById(R.id.title);
             notesDataSource = new NoteDataSource(mText.getContext());
         }
 
